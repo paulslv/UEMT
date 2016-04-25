@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IIS Web Application Name" description="" value="Emailtool" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^F:\\Anupama\\Email\ Tool\\UltimateEMT_bkp1Apr16\\UltimateEMT\\CodeFirst\\obj\\Release\\Package\\PackageTmp$" />
+    <parameterEntry kind="ProviderPath" scope="setAcl" match="^F:\\Anupama\\Email\ Tool\\UltimateEMT_bkp1Apr16\\UltimateEMT\\CodeFirst\\obj\\Release\\Package\\PackageTmp$" />
+  </parameter>
+  <parameter name="UltimateEMT-Web.config Connection String" description="" value="Data Source=row.database.windows.net;Initial Catalog=UltimateEMT;Integrated Security=False;User ID=paul;Password=awesome123#;Connect Timeout=60;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False" tags="">
+    <parameterEntry kind="XmlFile" scope="F:\\Anupama\\Email\ Tool\\UltimateEMT_bkp1Apr16\\UltimateEMT\\CodeFirst\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='UltimateEMT']/@connectionString" />
+  </parameter>
+</parameters>
