@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Data.Entity.ModelConfiguration.Conventions;
 
 namespace CodeFirst.Models
 {
@@ -24,8 +25,20 @@ namespace CodeFirst.Models
             : base("UltimateEMT", throwIfV1Schema: false)
         {
         }
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            
+            //modelBuilder.Entity<M_MailStatus>().HasMany(i => i.List).WithRequired().WillCascadeOnDelete(false);
+            //modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+            //modelBuilder.Entity<IdentityUserLogin>().HasKey<string>(l => l.UserId);
+            //modelBuilder.Entity<IdentityRole>().HasKey<string>(r => r.Id);
+            //modelBuilder.Entity<IdentityUserRole>().HasKey(r => new { r.RoleId, r.UserId });
 
-       
+            base.OnModelCreating(modelBuilder);
+
+        }
+
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
@@ -46,7 +59,7 @@ namespace CodeFirst.Models
         public DbSet<M_Tracking> M_Trackings { get; set; }
 
         public DbSet<CustomSqlException> CustomSqlExceptions { get; set; }
-        public DbSet<M_MailStatus> MailStatus { get; set; }
+        public DbSet<M_MailStatus> M_MailStatus { get; set; }
     }
 
   

@@ -1,0 +1,109 @@
+﻿@model  CodeFirst.ViewModels.CampaignViewModel
+@{
+    ViewBag.Title = "Campaign";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style type="text/css">
+    a.classActive {
+        background-image: url('../../Content/img/active (1).png');
+        display: block;
+        width: 20px;
+        margin-left:auto;
+        margin-right:auto;
+        text-indent: -9999px;
+    }
+    a.classInctive {
+        background-image: url('../../Content/img/inactive (1).png');
+        display: block;
+        width: 20px;
+        margin-left:auto;
+        margin-right:auto;
+        text-indent: -9999px;
+    }
+    .not-active {
+   pointer-events: none;
+   cursor: default;
+}
+</style>
+
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-8">
+            <h1 class="page-header">Campaigns</h1>
+        </div>
+        <div class="col-lg-2 pull-right">
+            <div class="page-header">
+                @Html.ActionLink("New Campaign", "Creation", "Campaign", new { @class = "btn btn-primary" })       
+
+            </div>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    List Of Campaigns
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+@if (Model.Campaigns.Count != 0)
+{
+                    <div class="dataTable_wrapper">
+                        <table class="table table-striped table-bordered table-hover" id="dataTables-Campaign">
+                            <thead>
+                                <tr>
+                                    <th>Campaign Name</th>
+                                    <th>Campaign Type</th>
+                                    <th>Email Subject</th>
+                                    <th>Change</th>
+                                    <th>Status</th>
+                                    <th>Send</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                               
+                                    @foreach (var item in Model.Campaigns)
+                                    {
+                                        <tr class="odd gradeX">
+                                            <td>@Html.DisplayFor(model => item.Name)</td>
+                                            <td>@Html.DisplayFor(model => item.M_CampTypes.Name)</td>
+                                            <td>@Html.DisplayFor(model => item.EmailSubject)</td>
+
+                                            <td class="center">@Html.ActionLink("Settings", "editCampaign", new { id = item.Cid }) | @Html.ActionLink("Template", "editDesigner", new { id = item.Cid }) </td>
+                                            @if (item.IsActive == true)
+                                            {
+                                            <td class="center">@Html.ActionLink("Active", "DeleteCamp", new { id = item.Cid }, new { @class = "classActive img-responsive", onclick = "return confirm('Are you sure you wish to Inactivate this Campaign?');" })</td>
+                                            <td class="center">@Html.ActionLink("Send Emails", "SendEmailAsync", new { id = item.Cid })</td>
+                                            }
+                                            else {
+                                                <td class="center">@Html.ActionLink("Inactive", "EditStatus", new { id = item.Cid }, new { @class = "classInctive img-responsive", onclick = "return confirm('Are you sure you wish to Active this Campaign?');" })</td>
+                                                <td class="center">@Html.ActionLink("Send Emails", "SendEmailAsync", new { id = item.Cid }, new { @class = "not-active" })</td>
+                                            }
+                                            
+                                          
+                                        </tr>
+                                    }
+                                
+                            </tbody>
+                        </table>
+                    </div>
+}
+else {
+        <p>No campaigns,start by creating @Html.ActionLink("New Campaign", "Creation", "Campaign") </p>
+}
+                    <!-- /.table-responsive -->
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+</div>
+<script type="text/javascript">
+    $('#dataTables-Campaign').DataTable({
+        responsive: true
+    });
+</script>

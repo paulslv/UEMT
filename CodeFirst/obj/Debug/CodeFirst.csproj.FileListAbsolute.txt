@@ -91,3 +91,15 @@ F:\Anupama\Email Tool\UltimateEMT_bkp1Apr16\UltimateEMT\CodeFirst\obj\Debug\Code
 F:\Anupama\Email Tool\UltimateEMT_bkp1Apr16\UltimateEMT\CodeFirst\obj\Debug\CodeFirst.dll
 F:\Anupama\Email Tool\UltimateEMT_bkp1Apr16\UltimateEMT\CodeFirst\obj\Debug\CodeFirst.pdb
 F:\Anupama\Email Tool\UltimateEMT_bkp1Apr16\UltimateEMT\CodeFirst\obj\Debug\CodeFirst.csprojResolveAssemblyReference.cache
+F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\obj\Debug\CodeFirst.dll
+F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\obj\Debug\CodeFirst.pdb
+F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\obj\Debug\CodeFirst.Migrations.InitialCreate.resources
+F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\obj\Debug\CodeFirst.csproj.GenerateResource.Cache
+F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\bin\ApplicationInsights.config
+F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\bin\CodeFirst.dll.config
+F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\bin\CodeFirst.dll
+F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\bin\CodeFirst.pdb
+F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\bin\Antlr3.Runtime.dll
+F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\bin\Microsoft.Web.Infrastructure.dll
+F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\bin\Microsoft.Web.Infrastructure.xml
+F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\bin\Antlr3.Runtime.pdb

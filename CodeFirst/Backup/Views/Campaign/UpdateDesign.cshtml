@@ -1,0 +1,113 @@
+﻿
+@model CodeFirst.Models.M_Campaigns
+
+@{
+    if (Model != null)
+    {
+        ViewBag.modelas = Model;
+    }
+
+    ViewBag.Title = "Designer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+<style>
+    .coder {
+        padding: 15px;
+        padding: 5px;
+        overflow: auto;
+        overflow-y: scroll;
+        background-color: black;
+        height: 80vh;
+        color: white;
+        font-family: 'courier new';
+    }
+
+    .result {
+        padding: 15px;
+    }
+</style>
+
+<script>
+    function saveInfo() {
+
+
+        var cont = document.getElementById("coderr").innerText;
+        debugger;
+        //var contetnt = $.parseHTML(cont).
+        var data = {
+            EmailContent: cont
+        };
+        debugger;
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("editDesigner", "Campaign")",
+            data: JSON.stringify(data),
+            success: function () {
+                location.href = '/Campaign/Campaign'
+                
+            },
+            contentType: 'application/json'
+        });
+
+    }
+
+
+</script>
+
+<div id="page-wrapper">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <button type="submit" class="btn btn-info pull-right" onclick="saveInfo()" style="margin-top:10px">Save HTML Content</button>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="panel panel-danger" style="margin-top: 20px;">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Code</h3>
+                    <input id="btnChk" type="button" style="float:right;margin-top: -25px" value="Check" />
+                </div>
+
+                <input type="hidden" value="" name="code" />
+                <div class="coder" id="coderr" contenteditable="true">
+                   @{ var myHtmlString = new HtmlString(Model.EmailContent);}
+                @Html.Raw(myHtmlString)
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="panel panel-success" style="margin-top: 20px;">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Output</h3>
+                </div>
+                <div class="result">
+                  
+                </div>
+            </div>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+
+
+    <!-- /.row -->
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#btnChk").click(function () {
+            var resultado = $('.coder').html();
+            console.log(resultado);
+            $('.result').html('');
+            $('.result').append($('<div/>').html(resultado).text() + "<br>");
+            $('.coder').focus();
+
+        });
+    });
+</script>
+
