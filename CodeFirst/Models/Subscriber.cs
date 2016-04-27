@@ -68,7 +68,7 @@ namespace CodeFirst.Models
             if (isSubscriberExist(this.EmailAddress,this.ListID, userID) == false)
             {
                 lSub.ListID = this.ListID;
-                
+                dbcontext = new ApplicationDbContext();
                 using (var trans = dbcontext.Database.BeginTransaction())
                 {
                     //Subscriber not present in list

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CodeFirst.Helpers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -41,12 +42,7 @@ namespace CodeFirst.Models
         static List<int?> listIDs;
         List<string> campaignNames;
         List<int?> campIds;
-        public static string GetURL()
-        {
-            HttpRequest request = HttpContext.Current.Request;
-            string url = request.Url.ToString();
-            return url;
-        }
+       
         public void SaveCampaign(string userID)
         {
             UsersCampaign user = new UsersCampaign();
@@ -73,7 +69,7 @@ namespace CodeFirst.Models
                             catch (SqlException ex)
                             {
                                 trans.Rollback();
-                                obj = new CustomSqlException((int)ErorrTypes.SqlExceptions, "Problem in saving data", ex.StackTrace, ErorrTypes.SqlExceptions.ToString(), userID, GetURL(), ex.LineNumber);
+                                obj = new CustomSqlException((int)ErorrTypes.SqlExceptions, "Problem in saving data", ex.StackTrace, ErorrTypes.SqlExceptions.ToString(), userID, Utlities.GetURL(), ex.LineNumber);
 
                                 obj.LogException();
                                 throw obj;
@@ -81,7 +77,7 @@ namespace CodeFirst.Models
                             catch (Exception ex)
                             {
                                 trans.Rollback();
-                                obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), userID, GetURL());
+                                obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), userID, Utlities.GetURL());
 
                                 obj.LogException();
                                 throw obj;
@@ -92,7 +88,7 @@ namespace CodeFirst.Models
                 }
                 catch (Exception ex)
                 {
-                    obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), userID, GetURL());
+                    obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), userID, Utlities.GetURL());
 
                     obj.LogException();
                     throw obj;
@@ -119,13 +115,13 @@ namespace CodeFirst.Models
                 }
                 catch (SqlException ex)
                 {
-                    obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), GetURL(), ex.LineNumber);
+                    obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), Utlities.GetURL(), ex.LineNumber);
                     obj.LogException();
                     throw obj;
                 }
                 catch (Exception ex)
                 {
-                    obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
+                    obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), Utlities.GetURL());
                     obj.LogException();
                     throw obj;
                 }
@@ -145,13 +141,13 @@ namespace CodeFirst.Models
                 }
                 catch (SqlException ex)
                 {
-                    obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), GetURL(), ex.LineNumber);
+                    obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), Utlities.GetURL(), ex.LineNumber);
                     obj.LogException();
                     throw obj;
                 }
                 catch (Exception ex)
                 {
-                    obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
+                    obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), Utlities.GetURL());
                     obj.LogException();
                     throw obj;
                 }

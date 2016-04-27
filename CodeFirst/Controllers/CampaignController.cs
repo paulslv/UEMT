@@ -217,7 +217,45 @@ namespace CodeFirst.Controllers
             }
             return RedirectToAction("Campaign"); ;
         }
-        public async Task<ActionResult> SendEmailAsync(int? id)
+        //public async Task<ActionResult> SendEmailAsync(int? id)
+        //{
+        //    M_Campaigns campaign = new M_Campaigns();
+        //    string pattern = "{}";
+        //    //string body = null;
+        //    campaign = dbContext.M_Campaigns.Find(id);
+        //    List<Subscriber> emailToList = new List<Subscriber>();
+        //    emailToList = dbContext.Subscribers.Where(s => s.ListID == campaign.ListId).ToList();
+        //    if (emailToList.Count != 0)
+        //    {
+        //        foreach (var email in emailToList)
+        //        {
+        //            if (email.Unsubscribe == false)
+        //            {
+        //                var emailSender = new EmailSender()
+        //                {
+        //                    FromAddress = new System.Net.Mail.MailAddress(campaign.FromEmail, campaign.FromName),
+        //                    Subject = campaign.EmailSubject,
+        //                    Body = WebUtility.HtmlDecode(campaign.EmailContent)
+        //                };
+        //                Regex reg = new Regex(pattern);
+        //                emailSender.Body = reg.Replace(emailSender.Body, email.FirstName + " " + email.LastName);
+        //                // body = emailSender.Body.Replace("{1}", email.FirstName + " " + email.LastName);
+        //                //  emailSender.Body = body;
+        //                emailSender.Body += getFooter(campaign.Cid, email.SubscriberID);
+        //                emailSender.AddToAddress(email.EmailAddress, email.FirstName + " " + email.LastName);
+
+        //                //M_MailStatus ms = new M_MailStatus();
+        //                //ms.settingMail(user.UsersID, (int)id, campaign.ListId, email.SubscriberID);
+        //                await emailSender.SendMailAsync(campaign.CTypeId);
+        //            }
+        //        }
+        //    }
+
+
+        //    return RedirectToAction("Thanks");
+
+        //}
+        public ActionResult SendEmailAsync(int? id)
         {
             M_Campaigns campaign = new M_Campaigns();
             string pattern = "{}";
@@ -243,7 +281,9 @@ namespace CodeFirst.Controllers
                         //  emailSender.Body = body;
                         emailSender.Body += getFooter(campaign.Cid, email.SubscriberID);
                         emailSender.AddToAddress(email.EmailAddress, email.FirstName + " " + email.LastName);
-                        await emailSender.SendMailAsync(campaign.CTypeId);
+
+                        M_MailStatus ms = new M_MailStatus();
+                        ms.settingMail(GetUser(), (int)id, campaign.ListId, email.SubscriberID);                        
                     }
                 }
             }
@@ -252,7 +292,6 @@ namespace CodeFirst.Controllers
             return RedirectToAction("Thanks");
 
         }
-
         private string getFooter(int campaign, int subscriber)
         {
             string foot, imgNm;

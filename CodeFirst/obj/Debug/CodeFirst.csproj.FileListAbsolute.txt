@@ -103,3 +103,4 @@ F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\bin\Antlr3.Runtime.dll
 F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\bin\Microsoft.Web.Infrastructure.dll
 F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\bin\Microsoft.Web.Infrastructure.xml
 F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\bin\Antlr3.Runtime.pdb
+F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\obj\Debug\CodeFirst.csprojResolveAssemblyReference.cache
