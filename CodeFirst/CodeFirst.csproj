@@ -229,6 +229,7 @@
     </Compile>
     <Compile Include="Helpers\EmailSender.cs" />
     <Compile Include="Helpers\ExceptionsClass.cs" />
+    <Compile Include="Helpers\Utlities.cs" />
     <Compile Include="Migrations\201604141235000_InitialCreate.cs" />
     <Compile Include="Migrations\201604141235000_InitialCreate.Designer.cs">
       <DependentUpon>201604141235000_InitialCreate.cs</DependentUpon>

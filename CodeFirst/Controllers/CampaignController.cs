@@ -184,12 +184,12 @@ namespace CodeFirst.Controllers
             catch (SqlException ex)
             {
                 throw ex;
-                return RedirectToAction("Campaign");
+                
             }
             catch (Exception ex)
             {
                 throw ex;
-                return RedirectToAction("Campaign");
+                
             }
 
         }
@@ -276,9 +276,7 @@ namespace CodeFirst.Controllers
                             Body = WebUtility.HtmlDecode(campaign.EmailContent)
                         };
                         Regex reg = new Regex(pattern);
-                        emailSender.Body = reg.Replace(emailSender.Body, email.FirstName + " " + email.LastName);
-                        // body = emailSender.Body.Replace("{1}", email.FirstName + " " + email.LastName);
-                        //  emailSender.Body = body;
+                        emailSender.Body = reg.Replace(emailSender.Body, email.FirstName + " " + email.LastName);                       
                         emailSender.Body += getFooter(campaign.Cid, email.SubscriberID);
                         emailSender.AddToAddress(email.EmailAddress, email.FirstName + " " + email.LastName);
 
@@ -287,10 +285,7 @@ namespace CodeFirst.Controllers
                     }
                 }
             }
-
-
             return RedirectToAction("Thanks");
-
         }
         private string getFooter(int campaign, int subscriber)
         {
