@@ -22,38 +22,33 @@ namespace CodeFirst.Controllers
         List<int?> cid = new List<int?>();
         List<string> CampNames = new List<string>();
         static string userID = null;
+        // static List<M_Campaigns> campaigns = null;
         public string GetUser()
         {
             userID = User.Identity.GetUserId();
             return userID;
         }
         // GET: Campaign
-        public ActionResult Index()
-        {
-            return View();
-        }
+
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
         public ActionResult Campaign()
         {
-            user.UsersID = User.Identity.GetUserId();
-
-            CampaignViewModel obj = new CampaignViewModel();
-            cid = dbContext.UsersCampaigns.Where(u => u.UsersID == user.UsersID).Select(c => c.CampaignID).ToList();
-            if (cid.Count != 0)
+            userID = GetUser();
+            CampaignViewModel model = new CampaignViewModel();
+            try
             {
-                foreach (var item in cid)
-                {
-                    obj.Campaigns.Add(dbContext.M_Campaigns.Where(u => u.Cid == item).FirstOrDefault());
-                }
-
+                model.Campaigns = M_Campaigns.ViewCampaigns(userID);
             }
-
-            //obj.Campaigns = dbContext.M_Campaigns.Where(c => c.IsActive == true).ToList();
-
-            return View(obj);
+            catch (CustomSqlException ex)
+            {
+                ex.LogException();
+                ModelState.AddModelError("viewcamp", "problem whilw showing campaigns");
+                return View();
+            }
+            return View(model);
 
         }
         /// <summary>
@@ -63,8 +58,18 @@ namespace CodeFirst.Controllers
         public ActionResult Creation()
         {
             userID = GetUser();
-            ViewBag.campTypes = new SelectList(M_CampTypes.GetCampTypes(), "CTId", "Name");
-            ViewBag.List = new SelectList(NewList.GetLists(userID), "ListID", "ListName");
+            try
+            {
+                ViewBag.campTypes = new SelectList(M_CampTypes.GetCampTypes(), "CTId", "Name");
+                ViewBag.List = new SelectList(NewList.GetLists(userID), "ListID", "ListName");
+            }
+            catch (CustomSqlException ex)
+            {
+                ex.LogException();
+                ModelState.AddModelError("viewcamp", "problem while showing campaigns");
+                return View("Error");
+            }
+
             return View();
         }
         public ActionResult Designer()
@@ -93,44 +98,75 @@ namespace CodeFirst.Controllers
         }
         public ActionResult saveCampInfo(string UserName)
         {
+            bool result = false;
             user.UsersID = User.Identity.GetUserId();
             M_Campaigns model = (M_Campaigns)TempData["CampInfo"];
-            try
+            if (ModelState.IsValid)
             {
-                var emailContent = WebUtility.HtmlEncode(UserName);
-                model.EmailContent = emailContent;
-                model.StatusId = 1;
-                model.IsActive = true;
-                model.SaveCampaign(userID);
-                return RedirectToAction("Campaign");
-            }
-            catch (CustomSqlException ex)
-            {
-                if (ex.ErrorCode == 100)
+                try
                 {
-                    ModelState.AddModelError("error", ex.message);
-                    return RedirectToAction("Creation");
+                    var emailContent = WebUtility.HtmlEncode(UserName);
+                    model.EmailContent = emailContent;
+                    model.StatusId = 1;
+                    model.IsActive = true;
+                    result = model.SaveCampaign(userID);
+                    if (result == true)
+                    {
+                        return RedirectToAction("Campaign");
+                    }
+                    else {
+                        ModelState.AddModelError("nameExists", "Campaign name already exist");
+                        return RedirectToAction("Creation");
+                    }
                 }
-                else if (ex.ErrorCode == 101)
+                catch (CustomSqlException ex)
                 {
-                    ModelState.AddModelError("Error", "logical exception");
-                    return RedirectToAction("Creation");
+                    if (ex.ErrorCode == 100)
+                    {
+                        ModelState.AddModelError("error", ex.message);
+                        return RedirectToAction("Creation");
+                    }
+                    else if (ex.ErrorCode == 101)
+                    {
+                        ModelState.AddModelError("Error", "logical exception");
+                        return RedirectToAction("Creation");
+                    }
                 }
             }
             return RedirectToAction("Creation");
         }
 
         [HttpGet]
-        public ActionResult editCampaign(int id)
+        public ActionResult editCampaign(int? id)
         {
+            userID = GetUser();
             UpdateCampModel campaign = new UpdateCampModel();
-            campaign.Campaigns = dbContext.M_Campaigns.Find(id);
-            campaign.Subscribers = dbContext.NewLists.Find(campaign.Campaigns.ListId).Subscribers.ToList();
-            WebUtility.HtmlDecode(campaign.Campaigns.EmailContent);
-            ViewBag.campTypes = new SelectList(dbContext.M_CampTypes, "CTId", "Name");
-            ViewBag.List = new SelectList(dbContext.NewLists, "ListID", "ListName");
-            return View("UpdateCamp", campaign);
+            try
+            {
+                // campaign.Campaigns = dbContext.M_Campaigns.Find(id);
+                campaign.Campaigns = M_Campaigns.FindCampaign(id);
+                //campaign.Subscribers = dbContext.NewLists.Find(campaign.Campaigns.ListId).Subscribers.ToList();
+                campaign.Subscribers = M_Campaigns.subscribersToCampaign(campaign.Campaigns.ListId);
+                WebUtility.HtmlDecode(campaign.Campaigns.EmailContent);
+                ViewBag.campTypes = new SelectList(M_CampTypes.GetCampTypes(), "CTId", "Name");
+                ViewBag.List = new SelectList(NewList.GetLists(userID), "ListID", "ListName");
+                return View("UpdateCamp", campaign);
+            }
+            catch (CustomSqlException ex)
+            {
+                if (ex.ErrorCode == 100)
+                {
+                    ModelState.AddModelError("error", ex.message);
+                    return RedirectToAction("Campaign");
+                }
+                else if (ex.ErrorCode == 101)
+                {
+                    ModelState.AddModelError("Error", "logical exception");
+                    return RedirectToAction("Campaign");
+                }
+            }
 
+            return RedirectToAction("Campaign");
         }
         [HttpPost]
         public ActionResult editCampaign(UpdateCampModel model)
@@ -142,16 +178,23 @@ namespace CodeFirst.Controllers
                 WebUtility.HtmlEncode(model.Campaigns.EmailContent);
                 try
                 {
-                    dbContext.Entry(model.Campaigns).State = System.Data.Entity.EntityState.Modified;
-                    dbContext.SaveChanges();
+                    //dbContext.Entry(model.Campaigns).State = System.Data.Entity.EntityState.Modified;
+                    //dbContext.SaveChanges();
+                    M_Campaigns.UpdateCampaign(model);
+                    return RedirectToAction("Campaign");
                 }
-                catch (SqlException ex)
+                catch (CustomSqlException ex)
                 {
-                    throw ex;
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
+                    if (ex.ErrorCode == 100)
+                    {
+                        ModelState.AddModelError("error", ex.message);
+                        return RedirectToAction("Campaign");
+                    }
+                    else if (ex.ErrorCode == 101)
+                    {
+                        ModelState.AddModelError("Error", "logical exception");
+                        return RedirectToAction("Campaign");
+                    }
                 }
             }
             return RedirectToAction("Campaign");
@@ -162,35 +205,57 @@ namespace CodeFirst.Controllers
         {
             M_Campaigns cmodel = new M_Campaigns();
             TempData["CID"] = id;
-            String EmailContent = dbContext.M_Campaigns.Where(c => c.Cid == id).Select(e => e.EmailContent).FirstOrDefault();
-            cmodel.EmailContent = EmailContent;
-            return View("UpdateDesign", cmodel);
+            //String EmailContent = dbContext.M_Campaigns.Where(c => c.Cid == id).Select(e => e.EmailContent).FirstOrDefault();
+            try
+            {
+                cmodel.EmailContent = M_Campaigns.EditTemplate(id);
+                return View("UpdateDesign", cmodel);
+            }
+            catch (CustomSqlException ex)
+            {
+                if (ex.ErrorCode == 100)
+                {
+                    ModelState.AddModelError("error", ex.message);
+                    return RedirectToAction("Campaign");
+                }
+                else if (ex.ErrorCode == 101)
+                {
+                    ModelState.AddModelError("Error", "logical exception");
+                    return RedirectToAction("Campaign");
+                }
+            }
+            return RedirectToAction("Campaign");
         }
         [HttpPost]
         public ActionResult editDesigner(string EmailContent)
         {
             M_Campaigns model = new M_Campaigns();
             int id = Convert.ToInt32(TempData["CID"]);
-            model = dbContext.M_Campaigns.SingleOrDefault(c => c.Cid == id);
+            // model = dbContext.M_Campaigns.SingleOrDefault(c => c.Cid == id);
             try
             {
-                if (model != null)
-                {
-                    model.EmailContent = WebUtility.HtmlEncode(EmailContent);
-                    dbContext.SaveChanges();
-                }
+                M_Campaigns.UpdateTemplate(EmailContent, id);
+                //if (model != null)
+                //{
+                //    model.EmailContent = WebUtility.HtmlEncode(EmailContent);
+                //    dbContext.SaveChanges();
+                //}
                 return RedirectToAction("Index", "Home", null);
             }
-            catch (SqlException ex)
+            catch (CustomSqlException ex)
             {
-                throw ex;
-                return RedirectToAction("Campaign");
+                if (ex.ErrorCode == 100)
+                {
+                    ModelState.AddModelError("error", ex.message);
+                    return RedirectToAction("Campaign");
+                }
+                else if (ex.ErrorCode == 101)
+                {
+                    ModelState.AddModelError("Error", "logical exception");
+                    return RedirectToAction("Campaign");
+                }
             }
-            catch (Exception ex)
-            {
-                throw ex;
-                return RedirectToAction("Campaign");
-            }
+            return RedirectToAction("Campaign");
 
         }
 
@@ -198,10 +263,27 @@ namespace CodeFirst.Controllers
         {
             if (id != null)
             {
-                M_Campaigns model = new M_Campaigns();
-                model = dbContext.M_Campaigns.Find(id);
-                model.IsActive = false;
-                dbContext.SaveChanges();
+                //M_Campaigns model = new M_Campaigns();
+                //model = dbContext.M_Campaigns.Find(id);
+                //model.IsActive = false;
+                //dbContext.SaveChanges();
+                try
+                {
+                    M_Campaigns.DisableCampaign(id);
+                }
+                catch (CustomSqlException ex)
+                {
+                    if (ex.ErrorCode == 100)
+                    {
+                        ModelState.AddModelError("error", ex.message);
+                        return RedirectToAction("Campaign");
+                    }
+                    else if (ex.ErrorCode == 101)
+                    {
+                        ModelState.AddModelError("Error", "logical exception");
+                        return RedirectToAction("Campaign");
+                    }
+                }
             }
             return RedirectToAction("Campaign"); ;
         }
@@ -210,12 +292,29 @@ namespace CodeFirst.Controllers
         {
             if (id != null)
             {
-                M_Campaigns model = new M_Campaigns();
-                model = dbContext.M_Campaigns.Find(id);
-                model.IsActive = true;
-                dbContext.SaveChanges();
+                //M_Campaigns model = new M_Campaigns();
+                //model = dbContext.M_Campaigns.Find(id);
+                //model.IsActive = true;
+                //dbContext.SaveChanges();
+                try
+                {
+                    M_Campaigns.EnableCampaign(id);
+                }
+                catch (CustomSqlException ex)
+                {
+                    if (ex.ErrorCode == 100)
+                    {
+                        ModelState.AddModelError("error", ex.message);
+                        return RedirectToAction("Campaign");
+                    }
+                    else if (ex.ErrorCode == 101)
+                    {
+                        ModelState.AddModelError("Error", "logical exception");
+                        return RedirectToAction("Campaign");
+                    }
+                }
             }
-            return RedirectToAction("Campaign"); ;
+            return RedirectToAction("Campaign");
         }
         //public async Task<ActionResult> SendEmailAsync(int? id)
         //{

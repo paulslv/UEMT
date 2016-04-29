@@ -12,11 +12,11 @@ namespace CodeFirst.Models
         [Key]
         public int TrackID { get; set; }
 
-        //[ForeignKey("M_Campaigns")]
-        public int CampId { get; set; }
+        [ForeignKey("M_Campaigns")]
+        public int? CampId { get; set; }
 
-        //[ForeignKey("Subscriber")]
-        public int SubsciberId { get; set; }
+        [ForeignKey("Subscriber")]
+        public int? SubsciberId { get; set; }
         public Nullable<System.DateTime> IsOpened { get; set; }
 
         public virtual M_Campaigns M_Campaigns { get; set; }

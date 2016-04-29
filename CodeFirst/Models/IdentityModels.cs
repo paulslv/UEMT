@@ -60,6 +60,8 @@ namespace CodeFirst.Models
 
         public DbSet<CustomSqlException> CustomSqlExceptions { get; set; }
         public DbSet<M_MailStatus> M_MailStatus { get; set; }
+
+        public DbSet<M_Profile> M_Profiles { get; set; }
     }
 
   

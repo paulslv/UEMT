@@ -59,10 +59,10 @@
                                                 @Html.DisplayFor(modelitem => item.EmailAddress)
                                             </td>
                                             <td>
-                                                @Html.ActionLink("Edit", "EditSusbscriber", new { id = item.SubscriberID })
+                                                @Html.ActionLink("Edit", "EditSusbscriber", "Subscriber", new { id = item.SubscriberID }, null)
                                             </td>
                                             <td>
-                                                @Html.ActionLink("Delete From List", "DeleteSusbscriber", new { id = item.SubscriberID }, new { onclick = "return confirm('Are you sure you wish to Delte Subscriber?');" })
+                                                @Html.ActionLink("Delete", "DeleteSusbscriber", "Subscriber", new { id = item.SubscriberID }, new { onclick = "return confirm('Are you sure you wish to Delte Subscriber?');" })
                                             </td>
                                         </tr>
                                     }
@@ -110,8 +110,17 @@
                 .tablesorterPager({ container: $("#pager"), size: $(".pagesize option:selected").val() });
         </script>*@
     <script type="text/javascript">
-        $('#dataTables-subscriber').DataTable({
-            responsive: true
-    });
+        //$('#dataTables-subscriber').DataTable({
+        //   // responsive: true
+        //});
+        $(function () {
+            $('#dataTables-subscriber').DataTable({
+                // responsive: true,
+                //"columnDefs": [{ "orderable": false, "targets": [4] }]
+
+            });
+        });
+
     </script>
+
 </head>

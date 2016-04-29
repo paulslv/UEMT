@@ -57,7 +57,7 @@ namespace CodeFirst.Controllers
                     ModelState.AddModelError("addsub", ex.message);
                     return RedirectToAction("AddSubcriber/" + model.ListID);
                 }
-                
+
             }
             return RedirectToAction("Index", "List");
         }
@@ -83,7 +83,7 @@ namespace CodeFirst.Controllers
                     ModelState.AddModelError("viewsub", ex.message);
                     return RedirectToAction("index", "List");
                 }
-               
+
             }
             else {
                 try
@@ -115,6 +115,7 @@ namespace CodeFirst.Controllers
         [HttpPost]
         public ActionResult ImportSubcriber(HttpPostedFileBase UploadFile, SubscribersViewModel model)
         {
+            subscriber = new Subscriber();
             if (ModelState.IsValid)
             {
                 if (UploadFile != null && UploadFile.ContentLength > 0)
@@ -130,7 +131,7 @@ namespace CodeFirst.Controllers
                             ModelState.AddModelError("importsub", ex.message);
                             return RedirectToAction("ImportSubcriber/" + model.ListID);
                         }
-                       
+
                     }
                     else if (UploadFile.FileName.EndsWith(".xls"))
                     {
@@ -197,7 +198,7 @@ namespace CodeFirst.Controllers
                 catch (CustomSqlException ex)
                 {
                     ModelState.AddModelError("editsub", ex.message);
-                    return RedirectToAction("EditSusbscriber/"+model.SubscriberID);
+                    return RedirectToAction("EditSusbscriber/" + model.SubscriberID);
                 }
             }
             else {
@@ -240,7 +241,7 @@ namespace CodeFirst.Controllers
             catch (CustomSqlException ex)
             {
                 ModelState.AddModelError("unsub", ex.message);
-                return RedirectToAction("Index","List");
+                return RedirectToAction("Index", "List");
             }
         }
     }

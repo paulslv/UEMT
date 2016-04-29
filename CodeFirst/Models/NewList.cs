@@ -64,7 +64,7 @@ namespace CodeFirst.Models
         /// <returns>listids collection</returns>
         public static List<int?> GetListIds(string userID)
         {
-           
+
             using (dbcontext = new ApplicationDbContext())
             {
                 try
@@ -75,18 +75,18 @@ namespace CodeFirst.Models
                 }
                 catch (SqlException ex)
                 {
-                    obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(),GetURL(),ex.LineNumber);
+                    obj = new CustomSqlException((int)ErorrTypes.others, ex.Message, ex.StackTrace, ErorrTypes.others.ToString(), GetURL(), ex.LineNumber);
                     obj.LogException();
                     throw obj;
                 }
                 catch (Exception ex)
                 {
-                    obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
+                    obj = new CustomSqlException((int)ErorrTypes.others, ex.Message, ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
                     obj.LogException();
                     throw obj;
                 }
             }
-            
+
         }
 
         public static List<NewList> GetLists()
@@ -100,13 +100,13 @@ namespace CodeFirst.Models
                 }
                 catch (SqlException ex)
                 {
-                    obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(),GetURL(), ex.LineNumber);
+                    obj = new CustomSqlException((int)ErorrTypes.others, ex.Message, ex.StackTrace, ErorrTypes.others.ToString(), GetURL(), ex.LineNumber);
                     obj.LogException();
                     throw obj;
                 }
                 catch (Exception ex)
                 {
-                    obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
+                    obj = new CustomSqlException((int)ErorrTypes.others, ex.Message, ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
                     obj.LogException();
                     throw obj;
                 }
@@ -149,7 +149,7 @@ namespace CodeFirst.Models
                             {
 
                                 trans.Rollback();
-                                obj = new CustomSqlException((int)ErorrTypes.SqlExceptions, "Problem in saving data", ex.StackTrace, ErorrTypes.SqlExceptions.ToString(), userID, GetURL(), ex.LineNumber);
+                                obj = new CustomSqlException((int)ErorrTypes.SqlExceptions, ex.Message, ex.StackTrace, ErorrTypes.SqlExceptions.ToString(), userID, GetURL(), ex.LineNumber);
 
                                 obj.LogException();
                                 throw obj;
@@ -157,7 +157,7 @@ namespace CodeFirst.Models
                             catch (Exception ex)
                             {
                                 trans.Rollback();
-                                obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), userID, GetURL());
+                                obj = new CustomSqlException((int)ErorrTypes.others, ex.Message, ex.StackTrace, ErorrTypes.others.ToString(), userID, GetURL());
 
                                 obj.LogException();
                                 throw obj;
@@ -169,7 +169,7 @@ namespace CodeFirst.Models
                 }
                 catch (Exception ex)
                 {
-                    obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), userID,GetURL());
+                    obj = new CustomSqlException((int)ErorrTypes.others, ex.Message, ex.StackTrace, ErorrTypes.others.ToString(), userID, GetURL());
                     obj.LogException();
                     throw obj;
                 }
@@ -178,7 +178,7 @@ namespace CodeFirst.Models
             else {
                 return "List name already exist";
             }
-         
+
         }
 
         /// <summary>
@@ -190,30 +190,41 @@ namespace CodeFirst.Models
         public bool CheckListExist(string listName, string userID)
         {
             listIds = new List<int?>();
-            listIds = GetListIds(userID);
+            //  listIds = GetListIds(userID);
+            bool res = false;
             using (dbcontext = new ApplicationDbContext())
             {
                 try
                 {
-                    foreach (var item in listIds)
+                    var listdata = from list in dbcontext.NewLists
+                                   join users in dbcontext.UsersList
+                                   on list.ListID equals users.ListID
+                                   where users.UsersID == userID
+                                   select new { list.ListName };
+                    //foreach (var item in listIds)
+                    //{
+                    //    ListNames.Add(dbcontext.NewLists.Where(l => l.ListID == item).Select(l => l.ListName).FirstOrDefault());
+                    //}
+                    if (listdata != null)
                     {
-                        ListNames.Add(dbcontext.NewLists.Where(l => l.ListID == item).Select(l => l.ListName).FirstOrDefault());
+                        res = listdata.Any(l => l.ListName == listName);
                     }
                 }
                 catch (SqlException ex)
                 {
-                    obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), GetURL(), ex.LineNumber);
+                    obj = new CustomSqlException((int)ErorrTypes.others, ex.Message, ex.StackTrace, ErorrTypes.others.ToString(), GetURL(), ex.LineNumber);
                     obj.LogException();
                     throw obj;
                 }
                 catch (Exception ex)
                 {
-                    obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
+                    obj = new CustomSqlException((int)ErorrTypes.others, ex.Message, ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
                     obj.LogException();
                     throw obj;
                 }
             }
-            return ListNames.Any(l => l == listName);
+            // return ListNames.Any(l => l == listName);
+            return res;
         }
 
         /// <summary>
@@ -223,31 +234,52 @@ namespace CodeFirst.Models
         /// <returns>return list view model which contains list information and count of its subcribers and unsubscribers</returns>
         public ListViewModel ViewList(string userID)
         {
-            NewList lst = null;
-            listIds = new List<int?>();
-            listIds = GetListIds(userID);
+            // NewList lst = null;
+            //listIds = new List<int?>();
+            // listIds = GetListIds(userID);
             using (dbcontext = new ApplicationDbContext())
             {
                 try
                 {
-                    foreach (var item in listIds)
+                    LVmodel.lists = (from list in dbcontext.NewLists
+                                     join users in dbcontext.UsersList
+                                     on list.ListID equals users.ListID
+                                     where users.UsersID == userID
+                                     select list).ToList();
+
+                    foreach (var i in LVmodel.lists)
                     {
-                        lst = new NewList();
-                        lst = dbcontext.NewLists.Where(u => u.ListID == item).FirstOrDefault();
-                        LVmodel.lists.Add(lst);
-                        var cnt = dbcontext.Subscribers.Where(l => l.ListID == item && l.Unsubscribe == false).Count();
+                        //int cnt = (from list in LVmodel.lists
+                        //           join sub in dbcontext.Subscribers
+                        //           on list.ListID equals sub.ListID
+                        //           where sub.ListID == i.ListID
+                        //           select sub).Count();
+                        int cnt = (from list in LVmodel.lists
+                                   join sub in dbcontext.ListSusbscribers
+                                   on list.ListID equals sub.ListID
+                                   where sub.ListID == i.ListID
+                                   select list).Count();
                         LVmodel.NoOfSubscribers.Add(cnt);
                     }
+
+                    //foreach (var item in listIds)
+                    //{
+                    //    lst = new NewList();
+                    //    lst = dbcontext.NewLists.Where(u => u.ListID == item).FirstOrDefault();
+                    //    LVmodel.lists.Add(lst);
+                    //    var cnt = dbcontext.Subscribers.Where(l => l.ListID == item && l.Unsubscribe == false).Count();
+                    //    LVmodel.NoOfSubscribers.Add(cnt);
+                    //}
                 }
                 catch (SqlException ex)
                 {
-                    obj= new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), GetURL(), ex.LineNumber);
+                    obj = new CustomSqlException((int)ErorrTypes.others, ex.Message, ex.StackTrace, ErorrTypes.others.ToString(), GetURL(), ex.LineNumber);
                     obj.LogException();
                     throw obj;
                 }
                 catch (Exception ex)
                 {
-                    obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
+                    obj = new CustomSqlException((int)ErorrTypes.others, ex.Message, ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
                     obj.LogException();
                     throw obj;
                 }
@@ -258,7 +290,7 @@ namespace CodeFirst.Models
         public static List<NewList> GetLists(string userID)
         {
             // listIds = new List<int?>();
-            lists  = new List<NewList>();
+            lists = new List<NewList>();
             listIds = GetListIds(userID);
             foreach (var item in listIds)
             {
@@ -272,7 +304,7 @@ namespace CodeFirst.Models
 
         public NewList EditList(int? listID)
         {
-            newList= new NewList();
+            newList = new NewList();
             using (dbcontext = new ApplicationDbContext())
             {
                 try
@@ -281,13 +313,13 @@ namespace CodeFirst.Models
                 }
                 catch (SqlException ex)
                 {
-                    obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), GetURL(), ex.LineNumber);
+                    obj = new CustomSqlException((int)ErorrTypes.others, ex.Message, ex.StackTrace, ErorrTypes.others.ToString(), GetURL(), ex.LineNumber);
                     obj.LogException();
                     throw obj;
                 }
                 catch (Exception ex)
                 {
-                    obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
+                    obj = new CustomSqlException((int)ErorrTypes.others, ex.Message, ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
                     obj.LogException();
                     throw obj;
                 }
@@ -306,13 +338,13 @@ namespace CodeFirst.Models
                 }
                 catch (SqlException ex)
                 {
-                    obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), GetURL(), ex.LineNumber);
+                    obj = new CustomSqlException((int)ErorrTypes.others, ex.Message, ex.StackTrace, ErorrTypes.others.ToString(), GetURL(), ex.LineNumber);
                     obj.LogException();
                     throw obj;
                 }
                 catch (Exception ex)
                 {
-                    obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(),GetURL());
+                    obj = new CustomSqlException((int)ErorrTypes.others, ex.Message, ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
                     obj.LogException();
                     throw obj;
                 }

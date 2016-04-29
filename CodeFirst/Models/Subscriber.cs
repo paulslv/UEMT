@@ -65,39 +65,40 @@ namespace CodeFirst.Models
         public void saveSubscriber(string userID)
         {
             ListSusbscriber lSub = new ListSusbscriber();
-            if (isSubscriberExist(this.EmailAddress,this.ListID, userID) == false)
+            if (isSubscriberExist(this.EmailAddress, this.ListID, userID) == false)
             {
                 lSub.ListID = this.ListID;
-                dbcontext = new ApplicationDbContext();
-                using (var trans = dbcontext.Database.BeginTransaction())
+                using (dbcontext = new ApplicationDbContext())
                 {
-                    //Subscriber not present in list
-                    try
+                    using (var trans = dbcontext.Database.BeginTransaction())
                     {
-                        using (dbcontext = new ApplicationDbContext())
+                        //Subscriber not present in list
+                        try
                         {
+
                             dbcontext.Subscribers.Add(this);
                             dbcontext.SaveChanges();
                             lSub.SubscribersID = this.SubscriberID;
                             dbcontext.ListSusbscribers.Add(lSub);
                             dbcontext.SaveChanges();
                             trans.Commit();
-                        }
-                    }
-                    catch (SqlException ex)
-                    {
-                        //failed to save in subscriber or listsubscriber,clear model ans add model error
-                        trans.Rollback();
-                        obj = new CustomSqlException((int)ErorrTypes.SqlExceptions, "Problem in saving data", ex.StackTrace, ErorrTypes.SqlExceptions.ToString(), GetURL(), ex.LineNumber);
 
-                        obj.LogException();
-                        throw obj;
-                    }
-                    catch (Exception ex)
-                    {
-                        obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
-                        obj.LogException();
-                        throw obj;
+                        }
+                        catch (SqlException ex)
+                        {
+                            //failed to save in subscriber or listsubscriber,clear model ans add model error
+                            trans.Rollback();
+                            obj = new CustomSqlException((int)ErorrTypes.SqlExceptions, "Problem in saving data", ex.StackTrace, ErorrTypes.SqlExceptions.ToString(), GetURL(), ex.LineNumber);
+
+                            obj.LogException();
+                            throw obj;
+                        }
+                        catch (Exception ex)
+                        {
+                            obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
+                            obj.LogException();
+                            throw obj;
+                        }
                     }
                 }
             }
@@ -112,11 +113,11 @@ namespace CodeFirst.Models
         /// <param name="emailAddress">check unique field for subscriber</param>
         /// <param name="userID"></param>
         /// <returns></returns>
-        public bool isSubscriberExist(string emailAddress,int? listID, string userID)
+        public bool isSubscriberExist(string emailAddress, int? listID, string userID)
         {
             List<Subscriber> subs = new List<Subscriber>();
             subs = GetsubscribersToList(listID, userID);
-            return subs.Any(s => s.EmailAddress==emailAddress);
+            return subs.Any(s => s.EmailAddress == emailAddress);
         }
 
         /// <summary>
@@ -139,14 +140,14 @@ namespace CodeFirst.Models
                     }
                     catch (SqlException ex)
                     {
-                        obj = new CustomSqlException((int)ErorrTypes.SqlExceptions, "Problem in saving data", ex.StackTrace, ErorrTypes.SqlExceptions.ToString(), GetURL(), ex.LineNumber);
+                        obj = new CustomSqlException((int)ErorrTypes.SqlExceptions, ex.Message, ex.StackTrace, ErorrTypes.SqlExceptions.ToString(), GetURL(), ex.LineNumber);
 
                         obj.LogException();
                         throw obj;
                     }
                     catch (Exception ex)
                     {
-                        obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
+                        obj = new CustomSqlException((int)ErorrTypes.others, ex.Message, ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
                         obj.LogException();
                         throw obj;
                     }
@@ -175,14 +176,14 @@ namespace CodeFirst.Models
                     }
                     catch (SqlException ex)
                     {
-                        obj = new CustomSqlException((int)ErorrTypes.SqlExceptions, "Problem in saving data", ex.StackTrace, ErorrTypes.SqlExceptions.ToString(), GetURL(), ex.LineNumber);
+                        obj = new CustomSqlException((int)ErorrTypes.SqlExceptions, ex.Message, ex.StackTrace, ErorrTypes.SqlExceptions.ToString(), GetURL(), ex.LineNumber);
 
                         obj.LogException();
                         throw obj;
                     }
                     catch (Exception ex)
                     {
-                        obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
+                        obj = new CustomSqlException((int)ErorrTypes.others, ex.Message, ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
                         obj.LogException();
                         throw obj;
                     }
@@ -211,14 +212,14 @@ namespace CodeFirst.Models
                 }
                 catch (SqlException ex)
                 {
-                    obj = new CustomSqlException((int)ErorrTypes.SqlExceptions, "Problem in saving data", ex.StackTrace, ErorrTypes.SqlExceptions.ToString(), GetURL(), ex.LineNumber);
+                    obj = new CustomSqlException((int)ErorrTypes.SqlExceptions, ex.Message, ex.StackTrace, ErorrTypes.SqlExceptions.ToString(), GetURL(), ex.LineNumber);
 
                     obj.LogException();
                     throw obj;
                 }
                 catch (Exception ex)
                 {
-                    obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
+                    obj = new CustomSqlException((int)ErorrTypes.others, ex.Message, ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
                     obj.LogException();
                     throw obj;
                 }
@@ -237,14 +238,14 @@ namespace CodeFirst.Models
             List<Subscriber> sub = null;
             listIds = new List<int?>();
             listIds = NewList.GetListIds(userID);
-                foreach (var item in listIds)
+            foreach (var item in listIds)
+            {
+                sub = new List<Subscriber>();
+                sub = GetSubscribersbyListID(item);
+                foreach (var i in sub.ToList())
                 {
-                    sub = new List<Subscriber>();
-                    sub = GetSubscribersbyListID(item);
-                    foreach (var i in sub.ToList())
-                    {
-                        subscribersList.Add(i);
-                    }
+                    subscribersList.Add(i);
+                }
             }
             return subscribersList;
         }
@@ -260,187 +261,187 @@ namespace CodeFirst.Models
                 {
                     Stream stream = UploadFile.InputStream;
 
-                string filename = System.IO.Path.GetFileNameWithoutExtension(UploadFile.FileName);
-                if (UploadFile.FileName.EndsWith(".xlsx"))
-                {
-                  
-                        string thisFile = filename + "_" + model.ListID + ".xlsx";
-                    // var path = System.IO.Path.Combine(Server.MapPath("~/ExcelFiles"), thisFile);
-                    excelDataReader = ExcelReaderFactory.CreateOpenXmlReader(stream);
-                    excelDataReader.IsFirstRowAsColumnNames = true;
-                    excelResult = excelDataReader.AsDataSet();
-                    model.dataTable = excelResult.Tables[0];
-                    //read column headers
-                    //  var columnHeaders = (from DataColumn dc in model.dataTable.Columns select dc.ColumnName).ToArray();
-                    // RedirectToAction("SetColumnHeader", columnHeaders);
-
-
-                    //save list to database
-                    if (model.dataTable.Rows.Count > 0)
+                    string filename = System.IO.Path.GetFileNameWithoutExtension(UploadFile.FileName);
+                    if (UploadFile.FileName.EndsWith(".xlsx"))
                     {
-                        // UploadFile.SaveAs(path);
-                        //ColumnList = ReadExcelHeader(path);
-                        for (int i = 0; i < model.dataTable.Rows.Count; i++)
+
+                        string thisFile = filename + "_" + model.ListID + ".xlsx";
+                        // var path = System.IO.Path.Combine(Server.MapPath("~/ExcelFiles"), thisFile);
+                        excelDataReader = ExcelReaderFactory.CreateOpenXmlReader(stream);
+                        excelDataReader.IsFirstRowAsColumnNames = true;
+                        excelResult = excelDataReader.AsDataSet();
+                        model.dataTable = excelResult.Tables[0];
+                        //read column headers
+                        //  var columnHeaders = (from DataColumn dc in model.dataTable.Columns select dc.ColumnName).ToArray();
+                        // RedirectToAction("SetColumnHeader", columnHeaders);
+
+
+                        //save list to database
+                        if (model.dataTable.Rows.Count > 0)
                         {
-                            List<string> sub = new List<string>();
-                            sub = dbcontext.Subscribers.Where(l => l.ListID == model.ListID).Select(m => m.EmailAddress).ToList();
-                            bool ispresent = false;
-                            try
+                            // UploadFile.SaveAs(path);
+                            //ColumnList = ReadExcelHeader(path);
+                            for (int i = 0; i < model.dataTable.Rows.Count; i++)
                             {
-                                ispresent = sub.Any(s => s == model.dataTable.Rows[i]["EmailAddress"].ToString());
-                            }
-                            catch (ArgumentException ex)
-                            {
-                                // ModelState.AddModelError("Fileerr", "Please see sample file format");
-                                // return View();
-                            }
+                                List<string> sub = new List<string>();
+                                sub = dbcontext.Subscribers.Where(l => l.ListID == model.ListID).Select(m => m.EmailAddress).ToList();
+                                bool ispresent = false;
+                                try
+                                {
+                                    ispresent = sub.Any(s => s == model.dataTable.Rows[i]["EmailAddress"].ToString());
+                                }
+                                catch (ArgumentException ex)
+                                {
+                                    // ModelState.AddModelError("Fileerr", "Please see sample file format");
+                                    // return View();
+                                }
                                 catch (Exception ex)
                                 {
-                                    obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
+                                    obj = new CustomSqlException((int)ErorrTypes.others, ex.Message, ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
                                     obj.LogException();
                                     throw obj;
                                 }
                                 if (ispresent == false)
-                            {
-                                ListSusbscriber lSub = new ListSusbscriber();
-
-                                lSub.ListID = model.ListID;
-                                using (var trans = dbcontext.Database.BeginTransaction())
                                 {
-                                    //ObjectParameter objParam = new ObjectParameter("ID", typeof(int));
-                                    try
-                                    {
-                                        subscriber.ListID = Convert.ToInt32(model.ListID);
-                                        subscriber.FirstName = model.dataTable.Rows[i]["FirstName"].ToString();
-                                        subscriber.LastName = model.dataTable.Rows[i]["LastName"].ToString();
-                                        subscriber.EmailAddress = model.dataTable.Rows[i]["EmailAddress"].ToString();
-                                        subscriber.AlternateEmailAddress = model.dataTable.Rows[i]["AlternateEmailAddress"].ToString();
-                                        subscriber.Address = model.dataTable.Rows[i]["Address"].ToString();
-                                        subscriber.Country = model.dataTable.Rows[i]["Country"].ToString();
-                                        subscriber.City = model.dataTable.Rows[i]["City"].ToString();
-                                        subscriber.AddedDate = DateTime.Now;
-                                        dbcontext.Subscribers.Add(subscriber);
-                                        dbcontext.SaveChanges();
-                                        //dbcontext.ImportSubscribers(Convert.ToInt32(model.ListID), model.dataTable.Rows[i]["FirstName"].ToString(),
-                                        //      model.dataTable.Rows[i]["LastName"].ToString(), model.dataTable.Rows[i]["EmailAddress"].ToString(), model.dataTable.Rows[i]["AlternateEmailAddress"].ToString(),
-                                        //      model.dataTable.Rows[i]["Address"].ToString(), model.dataTable.Rows[i]["Country"].ToString(), model.dataTable.Rows[i]["City"].ToString(),
-                                        //      DateTime.Now.ToString(), objParam);
+                                    ListSusbscriber lSub = new ListSusbscriber();
 
-                                        //lSub.SubscribersID = Convert.ToInt32(objParam.Value);
-                                        // lSub.SubscribersID = (int?)((SqlParameter)param[9]).Value;
-                                        lSub.SubscribersID = subscriber.SubscriberID;
-                                        dbcontext.ListSusbscribers.Add(lSub);
-                                        dbcontext.SaveChanges();
-                                        trans.Commit();
-                                    }
-                                    catch (ArgumentException ex)
+                                    lSub.ListID = model.ListID;
+                                    using (var trans = dbcontext.Database.BeginTransaction())
                                     {
-                                        // ModelState.AddModelError("Fileerr", "Please see sample file format");
-                                        // return View();
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        trans.Rollback();
-                                        obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
-                                        obj.LogException();
-                                        throw obj;
-                                    }
-                                }
-                            }
-                            else {
-                                // ModelState.AddModelError("present", "Some subscribers already present");
-                            }
+                                        //ObjectParameter objParam = new ObjectParameter("ID", typeof(int));
+                                        try
+                                        {
+                                            subscriber.ListID = Convert.ToInt32(model.ListID);
+                                            subscriber.FirstName = model.dataTable.Rows[i]["FirstName"].ToString();
+                                            subscriber.LastName = model.dataTable.Rows[i]["LastName"].ToString();
+                                            subscriber.EmailAddress = model.dataTable.Rows[i]["EmailAddress"].ToString();
+                                            subscriber.AlternateEmailAddress = model.dataTable.Rows[i]["AlternateEmailAddress"].ToString();
+                                            subscriber.Address = model.dataTable.Rows[i]["Address"].ToString();
+                                            subscriber.Country = model.dataTable.Rows[i]["Country"].ToString();
+                                            subscriber.City = model.dataTable.Rows[i]["City"].ToString();
+                                            subscriber.AddedDate = DateTime.Now;
+                                            dbcontext.Subscribers.Add(subscriber);
+                                            dbcontext.SaveChanges();
+                                            //dbcontext.ImportSubscribers(Convert.ToInt32(model.ListID), model.dataTable.Rows[i]["FirstName"].ToString(),
+                                            //      model.dataTable.Rows[i]["LastName"].ToString(), model.dataTable.Rows[i]["EmailAddress"].ToString(), model.dataTable.Rows[i]["AlternateEmailAddress"].ToString(),
+                                            //      model.dataTable.Rows[i]["Address"].ToString(), model.dataTable.Rows[i]["Country"].ToString(), model.dataTable.Rows[i]["City"].ToString(),
+                                            //      DateTime.Now.ToString(), objParam);
 
-                        }
-                    }
-                    // return RedirectToAction("ViewSubscribers/" + model.ListID);
-                }
-                else if (UploadFile.FileName.EndsWith(".xls"))
-                {
-                    string thisFile = filename + "_" + model.ListID + ".xls";
-                    // var path = System.IO.Path.Combine(Server.MapPath("~/ExcelFiles"), thisFile);
-                    excelDataReader = ExcelReaderFactory.CreateBinaryReader(stream);
-                    excelDataReader.IsFirstRowAsColumnNames = true;
-                    excelResult = excelDataReader.AsDataSet();
-                    model.dataTable = excelResult.Tables[0];
-                    //read column headers
-                    var columnHeaders = (from DataColumn dc in model.dataTable.Columns select dc.ColumnName).ToArray();
-                    if (model.dataTable.Rows.Count > 0)
-                    {
-                        //UploadFile.SaveAs(path);
-                        for (int i = 0; i < model.dataTable.Rows.Count; i++)
-                        {
-                            List<string> sub = new List<string>();
-                            sub = dbcontext.Subscribers.Where(l => l.ListID == model.ListID).Select(m => m.EmailAddress).ToList();
-                            bool ispresent = false;
-                            try
-                            {
-                                ispresent = sub.Any(s => s == model.dataTable.Rows[i]["EmailAddress"].ToString());
-                            }
-                            catch (ArgumentException ex)
-                            {
-                                //ModelState.AddModelError("Fileerr", "Please see sample file format");
-                                //  return View();
-                            }
-                            if (ispresent == false)
-                            {
-                                ListSusbscriber lSub = new ListSusbscriber();
-                                lSub.ListID = model.ListID;
-                                using (var trans = dbcontext.Database.BeginTransaction())
-                                {
-                                    //  ObjectParameter objParam = new ObjectParameter("ID", typeof(int));
-                                    try
-                                    {
-                                        subscriber.ListID = Convert.ToInt32(model.ListID);
-                                        subscriber.FirstName = model.dataTable.Rows[i]["FirstName"].ToString();
-                                        subscriber.LastName = model.dataTable.Rows[i]["LastName"].ToString();
-                                        subscriber.EmailAddress = model.dataTable.Rows[i]["EmailAddress"].ToString();
-                                        subscriber.AlternateEmailAddress = model.dataTable.Rows[i]["AlternateEmailAddress"].ToString();
-                                        subscriber.Address = model.dataTable.Rows[i]["Address"].ToString();
-                                        subscriber.Country = model.dataTable.Rows[i]["Country"].ToString();
-                                        subscriber.City = model.dataTable.Rows[i]["City"].ToString();
-                                        subscriber.AddedDate = DateTime.Now;
-                                        dbcontext.Subscribers.Add(subscriber);
-                                        dbcontext.SaveChanges();
-                                        //dbcontext.ImportSubscribers(Convert.ToInt32(model.ListID), model.dataTable.Rows[i]["FirstName"].ToString(),
-                                        //      model.dataTable.Rows[i]["LastName"].ToString(), model.dataTable.Rows[i]["EmailAddress"].ToString(), model.dataTable.Rows[i]["AlternateEmailAddress"].ToString(),
-                                        //      model.dataTable.Rows[i]["Address"].ToString(), model.dataTable.Rows[i]["Country"].ToString(), model.dataTable.Rows[i]["City"].ToString(),
-                                        //      DateTime.Now.ToString(), objParam);
-
-                                        //lSub.SubscribersID = Convert.ToInt32(objParam.Value);
-                                        // lSub.SubscribersID = (int?)((SqlParameter)param[9]).Value;
-                                        lSub.SubscribersID = subscriber.SubscriberID;
-                                        dbcontext.ListSusbscribers.Add(lSub);
-                                        dbcontext.SaveChanges();
-                                        trans.Commit();
-                                    }
-                                    catch (ArgumentException ex)
-                                    {
-                                        // ModelState.AddModelError("Fileerr", "Please see sample file format");
-                                        // return View();
-                                    }
-                                    catch (SqlException)
-                                    {
-                                        trans.Rollback();
-                                        //  ModelState.AddModelError("Fileerr", "Please see sample file format");
-                                    }
+                                            //lSub.SubscribersID = Convert.ToInt32(objParam.Value);
+                                            // lSub.SubscribersID = (int?)((SqlParameter)param[9]).Value;
+                                            lSub.SubscribersID = subscriber.SubscriberID;
+                                            dbcontext.ListSusbscribers.Add(lSub);
+                                            dbcontext.SaveChanges();
+                                            trans.Commit();
+                                        }
+                                        catch (ArgumentException ex)
+                                        {
+                                            // ModelState.AddModelError("Fileerr", "Please see sample file format");
+                                            // return View();
+                                        }
                                         catch (Exception ex)
                                         {
-                                            obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
+                                            trans.Rollback();
+                                            obj = new CustomSqlException((int)ErorrTypes.others, ex.Message, ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
                                             obj.LogException();
                                             throw obj;
                                         }
                                     }
-                            }
-                            else {
-                                // ModelState.AddModelError("present", "Some subscribers already present");
+                                }
+                                else {
+                                    // ModelState.AddModelError("present", "Some subscribers already present");
+                                }
+
                             }
                         }
-
+                        // return RedirectToAction("ViewSubscribers/" + model.ListID);
                     }
-                    //  return RedirectToAction("ViewSubscribers/" + model.ListID);
+                    else if (UploadFile.FileName.EndsWith(".xls"))
+                    {
+                        string thisFile = filename + "_" + model.ListID + ".xls";
+                        // var path = System.IO.Path.Combine(Server.MapPath("~/ExcelFiles"), thisFile);
+                        excelDataReader = ExcelReaderFactory.CreateBinaryReader(stream);
+                        excelDataReader.IsFirstRowAsColumnNames = true;
+                        excelResult = excelDataReader.AsDataSet();
+                        model.dataTable = excelResult.Tables[0];
+                        //read column headers
+                        var columnHeaders = (from DataColumn dc in model.dataTable.Columns select dc.ColumnName).ToArray();
+                        if (model.dataTable.Rows.Count > 0)
+                        {
+                            //UploadFile.SaveAs(path);
+                            for (int i = 0; i < model.dataTable.Rows.Count; i++)
+                            {
+                                List<string> sub = new List<string>();
+                                sub = dbcontext.Subscribers.Where(l => l.ListID == model.ListID).Select(m => m.EmailAddress).ToList();
+                                bool ispresent = false;
+                                try
+                                {
+                                    ispresent = sub.Any(s => s == model.dataTable.Rows[i]["EmailAddress"].ToString());
+                                }
+                                catch (ArgumentException ex)
+                                {
+                                    //ModelState.AddModelError("Fileerr", "Please see sample file format");
+                                    //  return View();
+                                }
+                                if (ispresent == false)
+                                {
+                                    ListSusbscriber lSub = new ListSusbscriber();
+                                    lSub.ListID = model.ListID;
+                                    using (var trans = dbcontext.Database.BeginTransaction())
+                                    {
+                                        //  ObjectParameter objParam = new ObjectParameter("ID", typeof(int));
+                                        try
+                                        {
+                                            subscriber.ListID = Convert.ToInt32(model.ListID);
+                                            subscriber.FirstName = model.dataTable.Rows[i]["FirstName"].ToString();
+                                            subscriber.LastName = model.dataTable.Rows[i]["LastName"].ToString();
+                                            subscriber.EmailAddress = model.dataTable.Rows[i]["EmailAddress"].ToString();
+                                            subscriber.AlternateEmailAddress = model.dataTable.Rows[i]["AlternateEmailAddress"].ToString();
+                                            subscriber.Address = model.dataTable.Rows[i]["Address"].ToString();
+                                            subscriber.Country = model.dataTable.Rows[i]["Country"].ToString();
+                                            subscriber.City = model.dataTable.Rows[i]["City"].ToString();
+                                            subscriber.AddedDate = DateTime.Now;
+                                            dbcontext.Subscribers.Add(subscriber);
+                                            dbcontext.SaveChanges();
+                                            //dbcontext.ImportSubscribers(Convert.ToInt32(model.ListID), model.dataTable.Rows[i]["FirstName"].ToString(),
+                                            //      model.dataTable.Rows[i]["LastName"].ToString(), model.dataTable.Rows[i]["EmailAddress"].ToString(), model.dataTable.Rows[i]["AlternateEmailAddress"].ToString(),
+                                            //      model.dataTable.Rows[i]["Address"].ToString(), model.dataTable.Rows[i]["Country"].ToString(), model.dataTable.Rows[i]["City"].ToString(),
+                                            //      DateTime.Now.ToString(), objParam);
+
+                                            //lSub.SubscribersID = Convert.ToInt32(objParam.Value);
+                                            // lSub.SubscribersID = (int?)((SqlParameter)param[9]).Value;
+                                            lSub.SubscribersID = subscriber.SubscriberID;
+                                            dbcontext.ListSusbscribers.Add(lSub);
+                                            dbcontext.SaveChanges();
+                                            trans.Commit();
+                                        }
+                                        catch (ArgumentException ex)
+                                        {
+                                            // ModelState.AddModelError("Fileerr", "Please see sample file format");
+                                            // return View();
+                                        }
+                                        catch (SqlException)
+                                        {
+                                            trans.Rollback();
+                                            //  ModelState.AddModelError("Fileerr", "Please see sample file format");
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            obj = new CustomSqlException((int)ErorrTypes.others, ex.Message, ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
+                                            obj.LogException();
+                                            throw obj;
+                                        }
+                                    }
+                                }
+                                else {
+                                    // ModelState.AddModelError("present", "Some subscribers already present");
+                                }
+                            }
+
+                        }
+                        //  return RedirectToAction("ViewSubscribers/" + model.ListID);
+                    }
                 }
-            }
             }
         }
         public void ImportCSV(HttpPostedFileBase UploadFile, SubscribersViewModel model)
@@ -520,7 +521,7 @@ namespace CodeFirst.Models
                                         }
                                         catch (Exception ex)
                                         {
-                                            obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
+                                            obj = new CustomSqlException((int)ErorrTypes.others, ex.Message, ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
                                             obj.LogException();
                                             throw obj;
                                         }
@@ -537,15 +538,15 @@ namespace CodeFirst.Models
                             }
                             catch (Exception ex)
                             {
-                                obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
+                                obj = new CustomSqlException((int)ErorrTypes.others, ex.Message, ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
                                 obj.LogException();
                                 throw obj;
                             }
                         }
                     }
                 }
-    }
-}
+            }
+        }
 
         public Subscriber Edit(int? sid)
         {
@@ -617,7 +618,7 @@ namespace CodeFirst.Models
                         }
                         catch (SqlException ex)
                         {
-                            obj= new CustomSqlException((int)ErorrTypes.SqlExceptions, "Problem in saving data", ex.StackTrace, ErorrTypes.SqlExceptions.ToString(),GetURL(), ex.LineNumber);
+                            obj = new CustomSqlException((int)ErorrTypes.SqlExceptions, "Problem in saving data", ex.StackTrace, ErorrTypes.SqlExceptions.ToString(), GetURL(), ex.LineNumber);
 
                             obj.LogException();
                             throw obj;
@@ -653,7 +654,7 @@ namespace CodeFirst.Models
 
         public List<Subscriber> Unsubscriber(int? lid)
         {
-           // listIds = list.GetListIds(userID);
+            // listIds = list.GetListIds(userID);
             if (lid != null)
             {
                 using (dbcontext = new ApplicationDbContext())
@@ -665,14 +666,14 @@ namespace CodeFirst.Models
                     }
                     catch (SqlException ex)
                     {
-                        obj = new CustomSqlException((int)ErorrTypes.SqlExceptions, "Problem in saving data", ex.StackTrace, ErorrTypes.SqlExceptions.ToString(),GetURL(), ex.LineNumber);
+                        obj = new CustomSqlException((int)ErorrTypes.SqlExceptions, ex.Message, ex.StackTrace, ErorrTypes.SqlExceptions.ToString(), GetURL(), ex.LineNumber);
 
                         obj.LogException();
                         throw obj;
                     }
                     catch (Exception ex)
                     {
-                        obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
+                        obj = new CustomSqlException((int)ErorrTypes.others, ex.Message, ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
                         obj.LogException();
                         throw obj;
                     }
@@ -698,14 +699,14 @@ namespace CodeFirst.Models
                     }
                     catch (SqlException ex)
                     {
-                        obj = new CustomSqlException((int)ErorrTypes.SqlExceptions, "Problem in saving data", ex.StackTrace, ErorrTypes.SqlExceptions.ToString(), GetURL(), ex.LineNumber);
+                        obj = new CustomSqlException((int)ErorrTypes.SqlExceptions, ex.Message, ex.StackTrace, ErorrTypes.SqlExceptions.ToString(), GetURL(), ex.LineNumber);
 
                         obj.LogException();
                         throw obj;
                     }
                     catch (Exception ex)
                     {
-                        obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
+                        obj = new CustomSqlException((int)ErorrTypes.others, ex.Message, ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
                         obj.LogException();
                         throw obj;
                     }

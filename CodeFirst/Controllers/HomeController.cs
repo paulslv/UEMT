@@ -16,24 +16,36 @@ namespace CodeFirst.Controllers
         List<Subscriber> Slists = new List<Subscriber>();
         List<int?> listIDs = new List<int?>();
         List<M_Campaigns> campaigns = new List<M_Campaigns>();
-        int cnt,cnt1;
+        int cnt, cnt1;
         public ActionResult Index()
         {
             string uid = User.Identity.GetUserId();
             DashboardViewModel model = new DashboardViewModel();
-            listIDs = dbContext.UsersList.Where(u => u.UsersID == uid).Select(l => l.ListID).ToList();
-            foreach (var item in listIDs)
-            {
-                
-                cnt += dbContext.Subscribers.Where(l => l.ListID == item && l.Unsubscribe==false).Count();
-                cnt1 += dbContext.Subscribers.Where(l => l.ListID == item && l.Unsubscribe == true).Count();
-            }
+            //listIDs = dbContext.UsersList.Where(u => u.UsersID == uid).Select(l => l.ListID).ToList();
+            cnt = (from sub in dbContext.Subscribers
+                   join users in dbContext.UsersList
+                   on sub.ListID equals users.ListID
+                   where (users.UsersID == uid && sub.Unsubscribe == false)
+                   select sub).Count();
+
+            cnt1 = (from sub in dbContext.Subscribers
+                    join users in dbContext.UsersList
+                    on sub.ListID equals users.ListID
+                    where (users.UsersID == uid && sub.Unsubscribe == true)
+                    select sub).Count();
+
+            //foreach (var item in listIDs)
+            //{
+
+            //    cnt += dbContext.Subscribers.Where(l => l.ListID == item && l.Unsubscribe==false).Count();
+            //    cnt1 += dbContext.Subscribers.Where(l => l.ListID == item && l.Unsubscribe == true).Count();
+            //}
             model.NoOfLists = dbContext.UsersList.Where(u => u.UsersID == uid).Count();
             model.NoOfSubscribers = cnt;
             model.NoOfUnSubscribers = cnt1;
             model.NoOfCampaigns = dbContext.UsersCampaigns.Where(u => u.UsersID == uid).Count();
             return View(model);
-           // return View();
+            // return View();
         }
 
         public ActionResult About()

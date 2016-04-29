@@ -12,17 +12,22 @@ namespace CodeFirst.Models
     public class M_MailStatus
     {
         [Key]
-        public int Id { get; set; }
-        [ForeignKey("User")]
-        public string UserId { get; set; }
-        [ForeignKey("Campaigns")]
-        public int CampId { get; set; }
-        [ForeignKey("List")]
-        public int ListId { get; set; }
-        [ForeignKey("Subscriber")]
-        public int SubscriberId { get; set; }
-        [ForeignKey("Status")]
         public int StatusId { get; set; }
+
+        [ForeignKey("Users")]
+        public string UserId { get; set; }
+
+        [ForeignKey("Campaigns")]
+        public int? CampId { get; set; }
+
+        [ForeignKey("List")]
+        public int? ListId { get; set; }
+
+        [ForeignKey("Subscriber")]
+        public int? SubscriberId { get; set; }
+
+        [ForeignKey("Status")]
+        public int? S_StatusId { get; set; }
 
 
         /// <summary>
@@ -32,7 +37,7 @@ namespace CodeFirst.Models
         public virtual NewList List { get; set; }
         public virtual Subscriber Subscriber { get; set; }
         public virtual S_Status Status { get; set; }
-        public virtual ApplicationUser User { get; set; }
+        public virtual ApplicationUser Users { get; set; }
 
 
         static ApplicationDbContext dbContext;

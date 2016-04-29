@@ -224,11 +224,13 @@
     <Compile Include="Controllers\M_CampTypesController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\SubscriberController.cs" />
+    <Compile Include="Controllers\UserProfileController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\EmailSender.cs" />
     <Compile Include="Helpers\ExceptionsClass.cs" />
+    <Compile Include="Helpers\Utlities.cs" />
     <Compile Include="Migrations\201604141235000_InitialCreate.cs" />
     <Compile Include="Migrations\201604141235000_InitialCreate.Designer.cs">
       <DependentUpon>201604141235000_InitialCreate.cs</DependentUpon>
@@ -243,6 +245,7 @@
     <Compile Include="Models\M_Campaigns.cs" />
     <Compile Include="Models\M_CampTypes.cs" />
     <Compile Include="Models\M_MailStatus.cs" />
+    <Compile Include="Models\M_Profile.cs" />
     <Compile Include="Models\M_Tracking.cs" />
     <Compile Include="Models\M_UsersListCampaign.cs" />
     <Compile Include="Models\NewList.cs" />
@@ -1139,6 +1142,7 @@
     <Content Include="Views\Subscriber\ImportSubcriber.cshtml" />
     <Content Include="Views\Subscriber\EditSusbscriber.cshtml" />
     <Content Include="Views\Subscriber\Unsubscribers.cshtml" />
+    <Content Include="Views\UserProfile\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -1153,6 +1157,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Logo\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201604141235000_InitialCreate.resx">

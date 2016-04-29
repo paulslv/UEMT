@@ -8,15 +8,15 @@ using System.Data.SqlClient;
 
 namespace CodeFirst.Models
 {
-    public class CustomSqlException:Exception
+    public class CustomSqlException : Exception
     {
 
 
-        public CustomSqlException(string Message) : base()
+        public CustomSqlException() : base()
         {
-            this.message = Message;
+            // this.message = Message;
         }
-        public CustomSqlException(int ec, string msg, string st, string type, string user,string url) : base()
+        public CustomSqlException(int ec, string msg, string st, string type, string user, string url) : base()
         {
             this.ErrorCode = ec;
             this.message = msg;
@@ -65,7 +65,7 @@ namespace CodeFirst.Models
 
         public string Type { get; set; }
 
-        public DateTime time { get; set; }
+        public DateTime? time { get; set; }
 
         public string url { get; set; }
 
@@ -91,7 +91,13 @@ namespace CodeFirst.Models
                 }
                 catch (SqlException ex)
                 {
-                   obj =new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), GetURL(), ex.LineNumber);
+                    obj = new CustomSqlException((int)ErorrTypes.others, ex.Message, ex.StackTrace, ErorrTypes.others.ToString(), GetURL(), ex.LineNumber);
+                    throw obj;
+                }
+                catch (Exception ex)
+                {
+                    obj = new CustomSqlException((int)ErorrTypes.others, ex.Message, ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
+                    obj.LogException();
                     throw obj;
                 }
             }
@@ -110,7 +116,7 @@ namespace CodeFirst.Models
         ArgumentNullExceptions = 102,
         ApplicationExceptions = 103,
         HttpExceptions = 104,
-        others=105,
-        SMTPExceptions=106
+        others = 105,
+        SMTPExceptions = 106
     }
 }

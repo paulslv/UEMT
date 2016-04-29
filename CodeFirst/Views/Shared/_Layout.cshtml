@@ -30,11 +30,18 @@
     <link href="~/Content/dist/css/sb-admin-2.css" rel="stylesheet">
     <!-- Morris Charts CSS -->
     <link href="~/Content/bower_components/morrisjs/morris.css" rel="stylesheet">
+    <link href="~/Content/Style.css" rel="stylesheet" />
+    <link href="~/Content/less/font-awesome.css" rel="stylesheet" />
     <!-- Custom Fonts -->
     <link href="~/Content/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <script src="~/Content/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
     <script src="~/Content/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
+    @*<script src="~/Scripts/jquery-1.10.2.min.js"></script>*@
+    <script src="~/Scripts/jquery.isloading.min.js"></script>
+    @*<link href="~/Content/Site.css" rel="stylesheet" />
+        <link href="~/Content/bootstarp.combined.min.css" rel="stylesheet" />*@
 </head>
+
 <body>
     <div id="wrapper">
         @if (Request.IsAuthenticated)
@@ -69,7 +76,8 @@
 
                             <ul class="dropdown-menu dropdown-user">
                                 <li>
-                                    <a href="/ViewProfile/@User.Identity.Name"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                                    <a href="/UserProfile/Index"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                                    @*<a href="/ViewProfile/@User.Identity.Name"><i class="fa fa-user fa-fw"></i> User Profile</a>*@
                                     @*@Html.ActionLink("Profile", "ViewProfile", new { id = User.Identity.Name },new { @class= "fa fa-user fa-fw" })*@
                                 </li>
                                 <li>
@@ -143,9 +151,9 @@
                                     <ul class="nav nav-second-level">
                                         <li>
                                             @*<a href="lists.html">Create List</a>*@
-                                            @Html.ActionLink("Campaign Performance","Index", "Reports")
+                                            @Html.ActionLink("Campaign Performance", "Index", "Reports")
                                         </li>
-                                       
+
                                     </ul>
                                 </li>
                             </ul>
@@ -167,7 +175,7 @@
         </div>
     </div>
 
-   
+
 
     @RenderSection("scripts", required: false)
 </body>

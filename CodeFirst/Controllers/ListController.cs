@@ -38,7 +38,7 @@ namespace CodeFirst.Controllers
             list = new NewList();
             LVmodel = new ListViewModel();
             userID = GetUser();
-           
+
             try
             {
                 LVmodel = list.ViewList(userID);
@@ -51,7 +51,7 @@ namespace CodeFirst.Controllers
 
             return View(LVmodel);
         }
-               
+
         [Authorize]
         [HttpGet]
         public ActionResult NewList()
@@ -73,7 +73,7 @@ namespace CodeFirst.Controllers
                 {
                     try
                     {
-                        success=model.SaveList(UsersID);
+                        success = model.SaveList(UsersID);
                         if (success != "Saved")
                         {
                             ModelState.AddModelError("Errorlistname", success);
@@ -99,7 +99,7 @@ namespace CodeFirst.Controllers
                         ModelState.AddModelError("error", "Errr occured in business logic");
                         return RedirectToAction("NewList");
                     }
-                   
+
                 }
                 else {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -107,7 +107,7 @@ namespace CodeFirst.Controllers
             }
             return RedirectToAction("Index");
         }
-       
+
         [Authorize]
         public FilePathResult SampleExcel(string fileName)
         {

@@ -27,7 +27,7 @@ namespace CodeFirst.Models
         static ApplicationDbContext dbcontext = null;
         static List<Country> countries = new List<Country>();
         static CustomSqlException obj = null;
-        public  static List<Country> GetCountries()
+        public static List<Country> GetCountries()
         {
             using (dbcontext = new ApplicationDbContext())
             {
@@ -46,7 +46,7 @@ namespace CodeFirst.Models
                 }
                 catch (Exception ex)
                 {
-                    obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(),GetURL());
+                    obj = new CustomSqlException((int)ErorrTypes.others, "Some problem occured while processing request", ex.StackTrace, ErorrTypes.others.ToString(), GetURL());
 
                     obj.LogException();
                     throw obj;
