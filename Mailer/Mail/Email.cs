@@ -13,6 +13,9 @@ namespace Mailer.Mail
         private bool issfs = true;
         public void send()
         {
+#if Debug
+
+#endif
             if (issfs)
             {
                 var myMessage = new SendGridMessage();

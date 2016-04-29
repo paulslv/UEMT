@@ -1,1 +1,13 @@
 F:\ROW\Email Markeing\Shared\UEMT\Mailer\bin\Debug\Mailer.exe.config
+F:\ROW\Email Markeing\Shared\UEMT\Mailer\bin\Debug\Mailer.exe
+F:\ROW\Email Markeing\Shared\UEMT\Mailer\bin\Debug\Mailer.pdb
+F:\ROW\Email Markeing\Shared\UEMT\Mailer\bin\Debug\Newtonsoft.Json.dll
+F:\ROW\Email Markeing\Shared\UEMT\Mailer\bin\Debug\SendGrid.dll
+F:\ROW\Email Markeing\Shared\UEMT\Mailer\bin\Debug\SendGrid.SmtpApi.dll
+F:\ROW\Email Markeing\Shared\UEMT\Mailer\bin\Debug\SendGridMail.dll
+F:\ROW\Email Markeing\Shared\UEMT\Mailer\bin\Debug\System.Net.Http.Formatting.dll
+F:\ROW\Email Markeing\Shared\UEMT\Mailer\bin\Debug\Newtonsoft.Json.xml
+F:\ROW\Email Markeing\Shared\UEMT\Mailer\bin\Debug\System.Net.Http.Formatting.xml
+F:\ROW\Email Markeing\Shared\UEMT\Mailer\obj\Debug\Mailer.csprojResolveAssemblyReference.cache
+F:\ROW\Email Markeing\Shared\UEMT\Mailer\obj\Debug\Mailer.exe
+F:\ROW\Email Markeing\Shared\UEMT\Mailer\obj\Debug\Mailer.pdb
