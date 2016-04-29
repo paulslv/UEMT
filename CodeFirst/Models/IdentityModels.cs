@@ -56,6 +56,10 @@ namespace CodeFirst.Models
         public DbSet<M_MailStatus> M_MailStatus { get; set; }
 
         public DbSet<M_Profile> M_Profiles { get; set; }
+
+        public System.Data.Entity.DbSet<CodeFirst.Models.M_MailPlans> M_MailPlans { get; set; }
+
+        public DbSet<M_Subscription> M_Subscription { get; set; }
     }
 
   

@@ -231,6 +231,7 @@
     <Compile Include="Controllers\ListController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\M_CampTypesController.cs" />
+    <Compile Include="Controllers\M_MailPlansController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\SubscriberController.cs" />
     <Compile Include="Global.asax.cs">
@@ -252,7 +253,10 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\M_Campaigns.cs" />
     <Compile Include="Models\M_CampTypes.cs" />
+    <Compile Include="Models\M_MailPlans.cs" />
     <Compile Include="Models\M_MailStatus.cs" />
+    <Compile Include="Models\M_Profile.cs" />
+    <Compile Include="Models\M_Subscription.cs" />
     <Compile Include="Models\M_Tracking.cs" />
     <Compile Include="Models\M_UsersListCampaign.cs" />
     <Compile Include="Models\NewList.cs" />
@@ -1149,6 +1153,11 @@
     <Content Include="Views\Subscriber\ImportSubcriber.cshtml" />
     <Content Include="Views\Subscriber\EditSusbscriber.cshtml" />
     <Content Include="Views\Subscriber\Unsubscribers.cshtml" />
+    <Content Include="Views\M_MailPlans\Create.cshtml" />
+    <Content Include="Views\M_MailPlans\Delete.cshtml" />
+    <Content Include="Views\M_MailPlans\Details.cshtml" />
+    <Content Include="Views\M_MailPlans\Edit.cshtml" />
+    <Content Include="Views\M_MailPlans\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

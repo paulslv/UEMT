@@ -251,6 +251,8 @@ namespace CodeFirst.Migrations
                 .ForeignKey("dbo.AspNetUsers", t => t.UsersID)
                 .Index(t => t.UsersID)
                 .Index(t => t.ListID);
+
+           
             
         }
         

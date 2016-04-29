@@ -103,7 +103,6 @@ F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\bin\Antlr3.Runtime.dll
 F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\bin\Microsoft.Web.Infrastructure.dll
 F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\bin\Microsoft.Web.Infrastructure.xml
 F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\bin\Antlr3.Runtime.pdb
-F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\obj\Debug\CodeFirst.csprojResolveAssemblyReference.cache
 F:\Anupama\GITUEMT\CodeFirst\obj\Debug\CodeFirst.Migrations.InitialCreate.resources
 F:\Anupama\GITUEMT\CodeFirst\obj\Debug\CodeFirst.csproj.GenerateResource.Cache
 F:\Anupama\GITUEMT\CodeFirst\obj\Debug\CodeFirst.dll
@@ -114,3 +113,8 @@ F:\Anupama\GITUEMT\CodeFirst\bin\CodeFirst.dll
 F:\Anupama\GITUEMT\CodeFirst\bin\CodeFirst.pdb
 F:\Anupama\GITUEMT\CodeFirst\bin\Antlr3.Runtime.dll
 F:\Anupama\GITUEMT\CodeFirst\bin\Antlr3.Runtime.pdb
+F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\bin\Newtonsoft.Json.dll
+F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\bin\SendGrid.SmtpApi.dll
+F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\bin\System.Net.Http.Formatting.dll
+F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\bin\Newtonsoft.Json.xml
+F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\bin\System.Net.Http.Formatting.xml

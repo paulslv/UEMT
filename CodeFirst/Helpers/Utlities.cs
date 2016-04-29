@@ -13,6 +13,12 @@ namespace CodeFirst.Helpers
             string url = request.Url.ToString();
             return url;
         }
+        /// <summary>
+        /// New user is been alloted with a starter plan 
+        /// </summary>
+        public void registerPlan() {
+
+        }
 
     }
 }
