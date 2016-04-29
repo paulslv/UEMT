@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
+
 namespace CodeFirst.Models
 {
     public class M_MailStatus
@@ -71,5 +72,7 @@ namespace CodeFirst.Models
                 throw obj;
             }
         }
+
+     
     }
 }

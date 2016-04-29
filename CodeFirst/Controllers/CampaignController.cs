@@ -254,6 +254,7 @@ namespace CodeFirst.Controllers
                     ModelState.AddModelError("Error", "logical exception");
                     return RedirectToAction("Campaign");
                 }
+
             }
             return RedirectToAction("Campaign");
 
@@ -376,20 +377,15 @@ namespace CodeFirst.Controllers
                         };
                         Regex reg = new Regex(pattern);
                         emailSender.Body = reg.Replace(emailSender.Body, email.FirstName + " " + email.LastName);
-                        // body = emailSender.Body.Replace("{1}", email.FirstName + " " + email.LastName);
-                        //  emailSender.Body = body;
                         emailSender.Body += getFooter(campaign.Cid, email.SubscriberID);
                         emailSender.AddToAddress(email.EmailAddress, email.FirstName + " " + email.LastName);
 
                         M_MailStatus ms = new M_MailStatus();
-                        ms.settingMail(GetUser(), (int)id, campaign.ListId, email.SubscriberID);                        
+                        ms.settingMail(GetUser(), (int)id, campaign.ListId, email.SubscriberID);
                     }
                 }
             }
-
-
             return RedirectToAction("Thanks");
-
         }
         private string getFooter(int campaign, int subscriber)
         {
