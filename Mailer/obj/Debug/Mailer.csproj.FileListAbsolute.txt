@@ -10,3 +10,6 @@ F:\ROW\Email Markeing\Shared\UEMT\Mailer\bin\Debug\Newtonsoft.Json.xml
 F:\ROW\Email Markeing\Shared\UEMT\Mailer\bin\Debug\System.Net.Http.Formatting.xml
 F:\ROW\Email Markeing\Shared\UEMT\Mailer\obj\Debug\Mailer.exe
 F:\ROW\Email Markeing\Shared\UEMT\Mailer\obj\Debug\Mailer.pdb
+F:\ROW\Email Markeing\Shared\UEMT\Mailer\obj\Debug\Mailer.csprojResolveAssemblyReference.cache
+F:\ROW\Email Markeing\Shared\UEMT\Mailer\obj\Debug\Mailer.Service1.resources
+F:\ROW\Email Markeing\Shared\UEMT\Mailer\obj\Debug\Mailer.csproj.GenerateResource.Cache

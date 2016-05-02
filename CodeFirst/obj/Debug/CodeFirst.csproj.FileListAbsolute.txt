@@ -118,3 +118,4 @@ F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\bin\SendGrid.SmtpApi.dll
 F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\bin\System.Net.Http.Formatting.dll
 F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\bin\Newtonsoft.Json.xml
 F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\bin\System.Net.Http.Formatting.xml
+F:\ROW\Email Markeing\Shared\UEMT\CodeFirst\obj\Debug\CodeFirst.csprojResolveAssemblyReference.cache

@@ -13,12 +13,12 @@ namespace CodeFirst.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201604141235000_InitialCreate"; }
+            get { return "201604291016329_InitialCreate"; }
         }
         
         string IMigrationMetadata.Source
         {
-            get { return null; }
+            get { return Resources.GetString("Source"); }
         }
         
         string IMigrationMetadata.Target

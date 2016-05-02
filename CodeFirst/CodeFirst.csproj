@@ -240,9 +240,9 @@
     <Compile Include="Helpers\EmailSender.cs" />
     <Compile Include="Helpers\ExceptionsClass.cs" />
     <Compile Include="Helpers\Utlities.cs" />
-    <Compile Include="Migrations\201604141235000_InitialCreate.cs" />
-    <Compile Include="Migrations\201604141235000_InitialCreate.Designer.cs">
-      <DependentUpon>201604141235000_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\201604291016329_InitialCreate.cs" />
+    <Compile Include="Migrations\201604291016329_InitialCreate.Designer.cs">
+      <DependentUpon>201604291016329_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -1174,8 +1174,8 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201604141235000_InitialCreate.resx">
-      <DependentUpon>201604141235000_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201604291016329_InitialCreate.resx">
+      <DependentUpon>201604291016329_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
